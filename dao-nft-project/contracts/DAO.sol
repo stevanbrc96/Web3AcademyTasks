@@ -28,11 +28,10 @@ contract DAO {
     error VotingPeriodEnded();
     error ProposalAlreadyExecuted();
 
-constructor(string memory _baseTokenURI) payable {
-    membershipNFT = new MembershipNFT(_baseTokenURI, msg.sender);
-}
-
-
+    constructor(string memory _baseTokenURI) payable {
+        membershipNFT = new MembershipNFT(_baseTokenURI);
+        membershipNFT.transferOwnership(address(this));
+    }
 
     modifier onlyNFTHolder() {
         if (membershipNFT.balanceOf(msg.sender) == 0) revert NotNFTHolder();
@@ -73,7 +72,6 @@ constructor(string memory _baseTokenURI) payable {
         if (p.executed) revert ProposalAlreadyExecuted();
 
         p.executed = true;
-
 
         emit ProposalExecuted(_proposalId);
     }
