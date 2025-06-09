@@ -50,7 +50,6 @@ contract AMMRouter {
         require(amounts[amounts.length-1] >= amountOutMin, "INSUFFICIENT_OUTPUT_AMOUNT");
     }
 
-    // --- PRIVATE HELPERS ---
 
     function _getReserves(address pair, address tokenIn) private view returns (uint reserveIn, uint reserveOut) {
         address token0 = AMMPair(pair).token0();

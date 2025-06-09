@@ -28,10 +28,15 @@ contract AMMPair is ERC20 {
         _reserve1 = reserve1;
     }
 
+
     function _update(uint _balance0, uint _balance1) private {
         reserve0 = _balance0;
         reserve1 = _balance1;
         emit Sync(_balance0, _balance1);
+    }
+
+    function sync() external {
+        _update(IERC20(token0).balanceOf(address(this)), IERC20(token1).balanceOf(address(this)));
     }
     
     function mint(address to) external returns (uint liquidity) {
@@ -85,6 +90,8 @@ contract AMMPair is ERC20 {
         emit Swap(msg.sender, amount0In, amount1In, amount0Out, amount1Out, to);
     }
     
+    // --- PRIVATE HELPERS ---
+
     function _safeTransfer(address token, address to, uint value) private {
         (bool success, bytes memory data) = token.call(abi.encodeWithSignature("transfer(address,uint256)", to, value));
         require(success && (data.length == 0 || abi.decode(data, (bool))), "TRANSFER_FAILED");
