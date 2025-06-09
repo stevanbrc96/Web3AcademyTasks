@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.9.3/contracts/token/ERC721/ERC721.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.9.3/contracts/access/Ownable.sol";
 
 contract MembershipNFT is ERC721, Ownable {
     uint256 public nextTokenId;
@@ -12,26 +12,11 @@ contract MembershipNFT is ERC721, Ownable {
 
     event MembershipMinted(address indexed to, uint256 tokenId);
 
-    constructor(string memory _baseTokenURI)
-        ERC721("DAO Membership", "DAO")
-        Ownable(msg.sender) // Vlasnik je DAO ugovor
-    {
-        nextTokenId = 1;
-        baseTokenURI = _baseTokenURI;
-    }
+   constructor(string memory _baseTokenURI) ERC721("DAO Membership", "DAO") Ownable() {
+    nextTokenId = 1;
+    baseTokenURI = _baseTokenURI;
+}
 
-    function mintInitialMembership(address _recipient) external onlyOwner {
-        require(!hasMinted[_recipient], "MembershipNFT: Already minted first NFT");
-        require(_recipient != address(0), "MembershipNFT: Zero address recipient");
-
-        uint256 tokenId = nextTokenId;
-        nextTokenId++;
-
-        _safeMint(_recipient, tokenId);
-        hasMinted[_recipient] = true;
-
-        emit MembershipMinted(_recipient, tokenId);
-    }
 
     function mint() external payable {
         require(!hasMinted[msg.sender], "Already minted");
@@ -48,10 +33,5 @@ contract MembershipNFT is ERC721, Ownable {
 
     function _baseURI() internal view override returns (string memory) {
         return baseTokenURI;
-    }
-
-    function withdraw(address payable _to) external onlyOwner {
-        require(_to != address(0), "Invalid withdraw address");
-        _to.transfer(address(this).balance);
     }
 }
