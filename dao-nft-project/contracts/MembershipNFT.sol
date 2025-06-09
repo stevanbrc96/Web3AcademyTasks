@@ -6,33 +6,38 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MembershipNFT is ERC721, Ownable {
     uint256 public nextTokenId;
-    uint256 public constant MINT_PRICE = 0.01 ether; 
-    mapping(address => bool) public hasMinted; 
-    string private baseTokenURI; 
+    uint256 public constant MINT_PRICE = 0.01 ether;
+    mapping(address => bool) public hasMinted;
+    string private baseTokenURI;
 
-    event MembershipMinted(address indexed to, uint256 tokenId); 
+    event MembershipMinted(address indexed to, uint256 tokenId);
 
-   
-    constructor(string memory _baseTokenURI, address _initialRecipient) // _baseTokenURI za metapodatke 
-        ERC721("DAO Membership", "DAO") // Nasleđuje ERC721 
-        Ownable(msg.sender) // Vlasnik NFT ugovora (DAO ugovor)
+    constructor(string memory _baseTokenURI)
+        ERC721("DAO Membership", "DAO")
+        Ownable(msg.sender) // Vlasnik je DAO ugovor
     {
-        nextTokenId = 1; 
-        baseTokenURI = _baseTokenURI; 
+        nextTokenId = 1;
+        baseTokenURI = _baseTokenURI;
+    }
 
-        
-        _safeMint(_initialRecipient, nextTokenId);  
-        hasMinted[_initialRecipient] = true;  
-        nextTokenId++; 
-        
-        emit MembershipMinted(_initialRecipient, nextTokenId - 1); 
+    function mintInitialMembership(address _recipient) external onlyOwner {
+        require(!hasMinted[_recipient], "MembershipNFT: Already minted first NFT");
+        require(_recipient != address(0), "MembershipNFT: Zero address recipient");
+
+        uint256 tokenId = nextTokenId;
+        nextTokenId++;
+
+        _safeMint(_recipient, tokenId);
+        hasMinted[_recipient] = true;
+
+        emit MembershipMinted(_recipient, tokenId);
     }
 
     function mint() external payable {
-        require(!hasMinted[msg.sender], "Already minted"); 
-        require(msg.value == MINT_PRICE, "Incorrect ETH amount");  
+        require(!hasMinted[msg.sender], "Already minted");
+        require(msg.value == MINT_PRICE, "Incorrect ETH amount");
 
-        uint256 tokenId = nextTokenId;  
+        uint256 tokenId = nextTokenId;
         nextTokenId++;
 
         _safeMint(msg.sender, tokenId);
@@ -42,6 +47,11 @@ contract MembershipNFT is ERC721, Ownable {
     }
 
     function _baseURI() internal view override returns (string memory) {
-        return baseTokenURI; 
+        return baseTokenURI;
+    }
+
+    function withdraw(address payable _to) external onlyOwner {
+        require(_to != address(0), "Invalid withdraw address");
+        _to.transfer(address(this).balance);
     }
 }
