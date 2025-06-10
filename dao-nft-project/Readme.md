@@ -30,4 +30,4 @@ bafybeieb27zldd6voinne2dzd6ggwciekltbjiarcl6k5gwjkko7ldf2r4
 
 Example Metadata URI (Token ID 1):
 ipfs://bafybeieb27zldd6voinne2dzd6ggwciekltbjiarcl6k5gwjkko7ldf2r4/1.json
-
+https://jade-high-caribou-183.mypinata.cloud/ipfs/bafybeieb27zldd6voinne2dzd6ggwciekltbjiarcl6k5gwjkko7ldf2r4/
