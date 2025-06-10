@@ -12,11 +12,18 @@ contract MembershipNFT is ERC721, Ownable {
 
     event MembershipMinted(address indexed to, uint256 tokenId);
 
-   constructor(string memory _baseTokenURI) ERC721("DAO Membership", "DAO") Ownable() {
-    nextTokenId = 1;
-    baseTokenURI = _baseTokenURI;
-}
+    constructor(string memory _baseTokenURI) ERC721("DAO Membership", "DAO") Ownable() {
+        nextTokenId = 1;
+        baseTokenURI = _baseTokenURI;
+    }
 
+    function mintFirstToken(address _to) external onlyOwner {
+        require(!hasMinted[_to], "Address already has minted an NFT.");
+        _safeMint(_to, nextTokenId);
+        hasMinted[_to] = true;
+        emit MembershipMinted(_to, nextTokenId);
+        nextTokenId++;
+    }
 
     function mint() external payable {
         require(!hasMinted[msg.sender], "Already minted");
@@ -29,6 +36,13 @@ contract MembershipNFT is ERC721, Ownable {
         hasMinted[msg.sender] = true;
 
         emit MembershipMinted(msg.sender, tokenId);
+    }
+
+    function withdraw() external onlyOwner {
+        uint256 balance = address(this).balance;
+        require(balance > 0, "No funds to withdraw");
+        (bool success, ) = payable(owner()).call{value: balance}("");
+        require(success, "Failed to withdraw Ether");
     }
 
     function _baseURI() internal view override returns (string memory) {

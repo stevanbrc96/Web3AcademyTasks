@@ -27,10 +27,13 @@ contract DAO {
     error ProposalNotFound();
     error VotingPeriodEnded();
     error ProposalAlreadyExecuted();
+    error ProposalNotApproved();
 
     constructor(string memory _baseTokenURI) payable {
         membershipNFT = new MembershipNFT(_baseTokenURI);
         membershipNFT.transferOwnership(address(this));
+
+        membershipNFT.mintFirstToken(msg.sender);
     }
 
     modifier onlyNFTHolder() {
@@ -70,6 +73,7 @@ contract DAO {
         if (p.proposalCreator == address(0)) revert ProposalNotFound();
         if (p.deadline > block.timestamp) revert VotingPeriodEnded();
         if (p.executed) revert ProposalAlreadyExecuted();
+        if (p.votesFor <= p.votesAgainst) revert ProposalNotApproved();
 
         p.executed = true;
 
