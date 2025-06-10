@@ -8,5 +8,5 @@ NFT Minting
 Minted to EOA: 0xBA50906Bdc29D3dc416Cd164c46762a3ff3a75Fa
 Mint transaction hash: 0x126eefe0556b6817ab551ba479d0c2e78e97c6b1d53a6fb2447aacf27ade3566
 NFT Metadata
-IPFS CID (folder with metadata files): bafybeieb27zldd6voinne2dzd6ggwciekltbjiarcl6k5gwjkko7ldf2r4 (Ovaj CID je preuzet iz prethodnog razgovora i pretpostavlja se da je korišćen za ovaj deploy.)
+IPFS CID (folder with metadata files): bafybeieb27zldd6voinne2dzd6ggwciekltbjiarcl6k5gwjkko7ldf2r4 
 Metadata URI (for Token ID 1): ipfs://bafybeieb27zldd6voinne2dzd6ggwciekltbjiarcl6k5gwjkko7ldf2r4/1.json (Ovo je format URI-ja koji se očekuje za Token ID 1.)
