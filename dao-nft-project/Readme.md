@@ -29,6 +29,5 @@ DAO omogućava članovima predlaganje i glasanje o predlozima.
 
 Svi podaci o članstvu i NFT metapodaci su dostupni preko IPFS-a.
 
-📄 Licence
-MIT
+📄 Licence MIT
 
