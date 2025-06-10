@@ -120,7 +120,6 @@ function Liquidity() {
         setIsLoading(true);
         const browserProvider = new ethers.BrowserProvider(window.ethereum); 
         setProvider(browserProvider);
-        // Uklonjeno 'accounts' jer se ne koristi direktno.
         await window.ethereum.request({ method: "eth_requestAccounts" }); 
         const signerInstance = await browserProvider.getSigner();
         const address = await signerInstance.getAddress();
